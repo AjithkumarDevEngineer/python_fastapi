@@ -49,7 +49,7 @@ def generate_text(request: PromptRequest):
     final_prompt = f"Write a response in a {request.tone} tone: {request.prompt}"
 
     payload = {
-        "model": "openai/gpt-oss-120b",        
+        "model": "openai/gpt-oss-120b",       
         "messages": [
             {
                 "role": "system",
