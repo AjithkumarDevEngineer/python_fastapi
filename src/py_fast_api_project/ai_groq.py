@@ -19,6 +19,20 @@ class PromptRequest(BaseModel):
 
 def generate_text(request: PromptRequest):
 
+    if not request.prompt.strip():
+        raise HTTPException(
+            status_code=400,
+            detail="Prompt cannot be empty."
+        )
+
+    tone_prefix = {
+        "friendly": "Respond in a friendly and conversational tone.",
+        "formal": "Respond in a professional and formal tone.",
+        "neutral": "Respond in a clear and neutral tone."
+    }.get(request.tone.lower(), "Respond neutrally.")
+
+    final_prompt = f"{tone_prefix}\n\nUser request: {request.prompt}"
+
     if not GROQ_API_KEY:
         raise HTTPException(
             status_code=500,
@@ -35,7 +49,7 @@ def generate_text(request: PromptRequest):
     final_prompt = f"Write a response in a {request.tone} tone: {request.prompt}"
 
     payload = {
-        "model": "openai/gpt-oss-120b",
+        "model": "openai/gpt-oss-120b",        
         "messages": [
             {
                 "role": "system",
@@ -83,6 +97,6 @@ def generate_text(request: PromptRequest):
         )
 
 
-@app.post("/generate")
+@app.post("/gen-ai")
 def generate(request: PromptRequest):
     return generate_text(request)
