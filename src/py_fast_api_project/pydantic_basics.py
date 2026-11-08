@@ -5,5 +5,3 @@ class Person(BaseModel):
     age: int
     email: str
 
-valid_data = Person(name="ajith", age=30, email="ak@gmail.com")
-print(valid_data)
